@@ -22,10 +22,7 @@ class DatabaseManager:
     def initialize_database(self) -> bool:
         """Initialize database connection"""
         try:
-            database_url = os.getenv(
-                "DATABASE_URL", 
-                "postgresql://neondb_owner:npg_I1NTimfVns0l@ep-cold-paper-a1ix5o17-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-            )
+            database_url = os.getenv("DATABASE_URL")
             
             self._db = SQLDatabase.from_uri(database_url)
             print(self._db.get_table_info())
