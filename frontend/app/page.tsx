@@ -26,7 +26,7 @@ export default function Home() {
     "Top 5 customers in December",
     "Sales by category",
     "Monthly revenue chart",
-    "Top products"
+    "Top 10 products by revenue"
   ];
 
   useEffect(() => {
@@ -63,11 +63,13 @@ export default function Home() {
       const data = await res.json();
       console.log(data);
 
-
       const payload: BotPayload = data.response || {};
       
       // Determine if this is a conversational response (no chart data)
       const isConversational = (!payload.barchart?.labels?.length && !payload.piechart?.labels?.length);
+      
+      // Extract follow-up questions from different sources
+      const followUpQuestions = data.response?.followUpQuestions || data.response?.payload?.followUpQuestions;
 
       setMessages((prev) => [
         ...prev,
@@ -75,7 +77,8 @@ export default function Home() {
           role: "assistant",
           content: payload.text || "Here is the result",
           payload,
-          isConversational
+          isConversational,
+          followUpQuestions
         }
       ]);
     } catch {
@@ -91,6 +94,10 @@ export default function Home() {
     }
   };
 
+  const handleQuestionSelect = (question: string) => {
+    handleSend(question);
+  };
+
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100">
       {/* Sidebar */}
@@ -104,7 +111,11 @@ export default function Home() {
         <Header />
 
         {/* Messages */}
-        <MessageList messages={messages} loading={loading} />
+        <MessageList 
+          messages={messages} 
+          loading={loading} 
+          onQuestionSelect={handleQuestionSelect}
+        />
 
         {/* Input Area - Floating Style */}
         <InputArea 

@@ -10,6 +10,7 @@ export type BotPayload = {
     labels: string[];
     values: number[];
   };
+  followUpQuestions?: string[];
 };
 
 export type Message = {
@@ -17,4 +18,6 @@ export type Message = {
   content: string;
   payload?: BotPayload;
   isConversational?: boolean;
+  followUpQuestions?: string[];
+  id?: number;
 };
