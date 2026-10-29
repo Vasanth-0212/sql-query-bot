@@ -53,7 +53,6 @@ export async function POST(request: NextRequest) {
       try {
         // Generate SQL
         sqlQuery = await generateSQL(question, DATABASE_SCHEMA);
-        console.log(sqlQuery);
         
         // Validate the generated SQL
         const validation = await validateSQL(sqlQuery);
@@ -100,7 +99,6 @@ export async function POST(request: NextRequest) {
 
     // Format response with charts
     const response = await formatResponse(question, queryResult.data || []);
-    console.log(response);
 
     return NextResponse.json({
       response,
